@@ -1,0 +1,18 @@
+# This is Git's per-user configuration file.
+[user]
+# Please adapt and uncomment the following lines:
+	name = Manas Chebrolu
+	email = 75514487+manasch@users.noreply.github.com
+	signingkey = 874ACD11530E94BE
+[core]
+	editor = vim
+[alias]
+	lon = log --oneline
+	pom = push -u origin master
+	lob = log --oneline --branches --graph --all
+[init]
+	defaultBranch = master
+[gpg "ssh"]
+	allowedsignersfile = /home/manas/.config/git/allowed_signers
+[commit]
+	gpgsign = true

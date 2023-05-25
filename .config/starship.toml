@@ -1,0 +1,5 @@
+[git_branch]
+always_show_remote = true
+
+[directory]
+truncate_to_repo = false
