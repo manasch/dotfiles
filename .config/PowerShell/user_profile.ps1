@@ -112,6 +112,11 @@ function adld() {
 	cd $pdir
 }
 
+function cwhp {
+    param([string]$Leetcode, [string]$Clone, [string]$Link)
+    python D:/projects/lc/src/cwh.py $Leetcode $Clone $Link
+}
+
 function tunnel() {
 	cd C:/Software/Powertunnel
 	java -jar PowerTunnel.jar --start --minimized
@@ -124,13 +129,10 @@ function cleanhist() {
 	cd $pdir
 }
 
-function lc([string]$Param) {
-	$pdir = $PWD.Path
-	cd D:\projects\lc
-	.venv/Scripts/activate
-	python main.py $Param
-	mv *.md $pdir/
-	cd $pdir
+function Remove-DuplicateHistory {
+    $historyFilePath = $(Get-PSReadLineOption).HistorySavePath
+    $lines = Get-Content -Path $historyFilePath | Select-Object -Unique
+    $lines | Set-Content -Path $historyFilePath
 }
 
 function poweroff() {
@@ -381,3 +383,9 @@ filter __rclone_escapeStringWithSpecialChars {
 }
 
 Register-ArgumentCompleter -CommandName 'rclone' -ScriptBlock $__rcloneCompleterBlock
+
+# --------------------------------
+
+# fnm env vars
+fnm env --use-on-cd | Out-String | Invoke-Expression
+
