@@ -112,11 +112,6 @@ function adld() {
 	cd $pdir
 }
 
-function cwhp {
-    param([string]$Leetcode, [string]$Clone, [string]$Link)
-    python D:/projects/lc/src/cwh.py $Leetcode $Clone $Link
-}
-
 function tunnel() {
 	cd C:/Software/Powertunnel
 	java -jar PowerTunnel.jar --start --minimized
@@ -133,6 +128,10 @@ function Remove-DuplicateHistory {
     $historyFilePath = $(Get-PSReadLineOption).HistorySavePath
     $lines = Get-Content -Path $historyFilePath | Select-Object -Unique
     $lines | Set-Content -Path $historyFilePath
+}
+
+function lcstats() {
+    python D:\scripts\lcstats\lcstats.py
 }
 
 function poweroff() {
