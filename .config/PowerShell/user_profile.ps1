@@ -36,6 +36,7 @@ Set-PSReadLineOption -HistorySearchCursorMovesToEnd
 
 Import-Module Terminal-Icons
 Invoke-Expression (&starship init powershell)
+# Invoke-Expression (& { (zoxide init powershell | Out-String) })
 
 # Fzf -------------------------------------------------------------------------------------
 
@@ -386,5 +387,5 @@ Register-ArgumentCompleter -CommandName 'rclone' -ScriptBlock $__rcloneCompleter
 # --------------------------------
 
 # fnm env vars
-fnm env --use-on-cd | Out-String | Invoke-Expression
+# fnm env --use-on-cd | Out-String | Invoke-Expression
 
