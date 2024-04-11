@@ -1,18 +1,23 @@
-# This is Git's per-user configuration file.
 [user]
-# Please adapt and uncomment the following lines:
 	name = Manas Chebrolu
 	email = 75514487+manasch@users.noreply.github.com
 	signingkey = 874ACD11530E94BE
-[core]
-	editor = vim
 [alias]
 	lon = log --oneline
 	pom = push -u origin master
 	lob = log --oneline --branches --graph --all
-[init]
-	defaultBranch = master
-[gpg "ssh"]
-	allowedsignersfile = /home/manas/.config/git/allowed_signers
+	cfl = config --local --list
+	cfg = config --global --list
+[core]
+	editor = nvim
 [commit]
 	gpgsign = true
+[gpg]
+	program = C:\\Software\\GnuPG\\bin\\gpg.exe
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[credential "https://git-codecommit.ap-south-1.amazonaws.com"]
+	provider = generic
