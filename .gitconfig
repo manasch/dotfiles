@@ -1,18 +1,34 @@
-# This is Git's per-user configuration file.
 [user]
-# Please adapt and uncomment the following lines:
 	name = Manas Chebrolu
 	email = 75514487+manasch@users.noreply.github.com
 	signingkey = 874ACD11530E94BE
-[core]
-	editor = vim
 [alias]
 	lon = log --oneline
 	pom = push -u origin master
 	lob = log --oneline --branches --graph --all
-[init]
-	defaultBranch = master
-[gpg "ssh"]
-	allowedsignersfile = /home/manas/.config/git/allowed_signers
+	cfl = config --local --list
+	cfg = config --global --list
+    vg = "!f() { \
+    git log --all --color --graph --pretty=format:'%C(bold yellow)<sig>%G?</sig>%C(reset) %C(red)%h%C(reset) -%C(yellow)%d%C(reset) %s %C(green)(%cr) %C(blue)<%an>%C(reset)' | \
+    sed \
+    -e 's#<sig>G</sig>#Good#' \
+    -e 's#<sig>B</sig>#\\nBAD \\nBAD \\nBAD \\nBAD \\nBAD#' \
+    -e 's#<sig>U</sig>#Unknown#' \
+    -e 's#<sig>X</sig>#Expired#' \
+    -e 's#<sig>Y</sig>#Expired Key#' \
+    -e 's#<sig>R</sig>#Revoked#' \
+    -e 's#<sig>E</sig>#Missing Key#' \
+    -e 's#<sig>N</sig>#None#' | \
+    less -r; \
+}; f"
+[core]
+	editor = vim
 [commit]
 	gpgsign = true
+[gpg]
+	program = C:\\Software\\GnuPG\\bin\\gpg.exe
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge --skip -- %f
+	process = git-lfs filter-process --skip
+	required = true

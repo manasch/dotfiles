@@ -60,6 +60,10 @@ if (Test-Path($ChocolateyProfile)) {
 
 Import-Module z
 
+# Aliases
+
+Set-Alias vim nvim
+
 # User Defined ----------------------------------------------------------------------------
 
 function rconf() {
