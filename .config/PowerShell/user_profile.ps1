@@ -1,23 +1,23 @@
 # Parallel Loading ------------------------------------------------------------------------
 
 # $IconsShell = Start-ThreadJob {
-# 	Import-Module Terminal-Icons
+#   Import-Module Terminal-Icons
 # }
 
 # $Fzf = Start-ThreadJob {
-# 	Import-Module PSFzf
-# 	Set-PsFzfOption -PSReadlineChordProvider 'Ctrl+f' -PSReadlineChordReverseHistory 'Ctrl+r'
+#   Import-Module PSFzf
+#   Set-PsFzfOption -PSReadlineChordProvider 'Ctrl+f' -PSReadlineChordReverseHistory 'Ctrl+r'
 # }
 
 # $Starship = Start-ThreadJob {
-# 	Invoke-Expression (&starship init powershell)
+#   Invoke-Expression (&starship init powershell)
 # }
 
 # $Chocolatey = Start-ThreadJob {
-# 	$ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
-# 	if (Test-Path($ChocolateyProfile)) {
-# 	  Import-Module "$ChocolateyProfile"
-# 	}
+#   $ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
+#   if (Test-Path($ChocolateyProfile)) {
+#     Import-Module "$ChocolateyProfile"
+#   }
 # }
 
 
@@ -67,66 +67,66 @@ Set-Alias vim nvim
 # User Defined ----------------------------------------------------------------------------
 
 function rconf() {
-	subl (rclone config file | grep conf)
+    subl (rclone config file | grep conf)
 }
 
 function lnsync([string]$param) {
-	if ($param) {
-		Write-Output "rclone sync `"D:/ln/`" `"server:/LN/`" -n"
-		rclone sync "D:/ln/" "server:/LN/" -n
-	}
-	else {
-		Write-Output "rclone sync `"D:/ln/`" `"server:/LN/`" -P"
-		rclone sync "D:/ln/" "server:/LN/" -P
-	}
+    if ($param) {
+        Write-Output "rclone sync `"D:/ln/`" `"server:/LN/`" -n"
+        rclone sync "D:/ln/" "server:/LN/" -n
+    }
+    else {
+        Write-Output "rclone sync `"D:/ln/`" `"server:/LN/`" -P"
+        rclone sync "D:/ln/" "server:/LN/" -P
+    }
 }
 
 function pwshistory() {
-	subl (Get-PSReadLineOption).HistorySavePath
+    subl (Get-PSReadLineOption).HistorySavePath
 }
 
 function hists() {
-	cat (Get-PSReadLineOption).HistorySavePath | fzf
+    cat (Get-PSReadLineOption).HistorySavePath | fzf
 }
 
 function newvenv([string]$Param) {
-	if ($Param) {
-		if (!(Test-Path $PWD\$Param)) {
-			virtualenv $Param
-		}
-		else {
-			Write-Output "Already Exists"
-		}
-	}
-	else {
-		if (!(Test-Path $PWD\venv)) {
-			virtualenv .venv
-		}
-		else {
-			Write-Output "Already Exists"
-		}
-	}
+    if ($Param) {
+        if (!(Test-Path $PWD\$Param)) {
+            virtualenv $Param
+        }
+        else {
+            Write-Output "Already Exists"
+        }
+    }
+    else {
+        if (!(Test-Path $PWD\venv)) {
+            virtualenv .venv
+        }
+        else {
+            Write-Output "Already Exists"
+        }
+    }
 }
 
 function adld() {
-	$pdir = $PWD.Path
-	cd D:/projects/gsearch/gsearch
-	../.venv/Scripts/activate
-	Invoke-Expression "python main.py"
-	deactivate
-	cd $pdir
+    $pdir = $PWD.Path
+    cd D:/projects/gsearch/gsearch
+    ../.venv/Scripts/activate
+    Invoke-Expression "python main.py"
+    deactivate
+    cd $pdir
 }
 
 function tunnel() {
-	cd C:/Software/Powertunnel
-	java -jar PowerTunnel.jar --start --minimized
+    cd C:/Software/Powertunnel
+    java -jar PowerTunnel.jar --start --minimized
 }
 
 function cleanhist() {
-	$pdir = $PWD.Path
-	cd C:\Users\manas\.config\PowerShell
-	python clean_history.py $(Get-PSReadLineOption).HistorySavePath
-	cd $pdir
+    $pdir = $PWD.Path
+    cd C:\Users\manas\.config\PowerShell
+    uv run python clean_history.py $(Get-PSReadLineOption).HistorySavePath
+    cd $pdir
 }
 
 function Remove-DuplicateHistory {
@@ -136,19 +136,19 @@ function Remove-DuplicateHistory {
 }
 
 function lcstats() {
-    python D:\scripts\lcstats\lcstats.py
+    uv run python D:\scripts\lcstats\lcstats.py
 }
 
 function poweroff() {
-	shutdown /s /t 0
+    shutdown /s /t 0
 }
 
 function reboot() {
-	shutdown /r /t 0
+    shutdown /r /t 0
 }
 
 function hibernate() {
-	shutdown /h
+    shutdown /h
 }
 
 # Wait for Parallel Jobs -----------------------------------------------------------------
@@ -385,6 +385,28 @@ filter __rclone_escapeStringWithSpecialChars {
 
     }
 }
+
+# --------------------------------
+
+Import-Module PSReadLine
+Set-PSReadLineKeyHandler -Chord Tab -Function MenuComplete
+$scriptblock = {
+    param($wordToComplete, $commandAst, $cursorPosition)
+    $Env:_ANILIST_EXPORT_COMPLETE = "complete_powershell"
+    $Env:_TYPER_COMPLETE_ARGS = $commandAst.ToString()
+    $Env:_TYPER_COMPLETE_WORD_TO_COMPLETE = $wordToComplete
+    anilist-export | ForEach-Object {
+        $commandArray = $_ -Split ":::"
+        $command = $commandArray[0]
+        $helpString = $commandArray[1]
+        [System.Management.Automation.CompletionResult]::new(
+            $command, $command, 'ParameterValue', $helpString)
+    }
+    $Env:_ANILIST_EXPORT_COMPLETE = ""
+    $Env:_TYPER_COMPLETE_ARGS = ""
+    $Env:_TYPER_COMPLETE_WORD_TO_COMPLETE = ""
+}
+Register-ArgumentCompleter -Native -CommandName anilist-export -ScriptBlock $scriptblock
 
 Register-ArgumentCompleter -CommandName 'rclone' -ScriptBlock $__rcloneCompleterBlock
 
