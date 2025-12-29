@@ -123,10 +123,10 @@ function tunnel() {
 }
 
 function cleanhist() {
-    $pdir = $PWD.Path
-    cd C:\Users\manas\.config\PowerShell
-    uv run python clean_history.py $(Get-PSReadLineOption).HistorySavePath
-    cd $pdir
+	$pdir = $PWD.Path
+	cd C:\Users\manas\.config\PowerShell
+	uv run clean_history.py $(Get-PSReadLineOption).HistorySavePath
+	cd $pdir
 }
 
 function Remove-DuplicateHistory {
@@ -136,7 +136,7 @@ function Remove-DuplicateHistory {
 }
 
 function lcstats() {
-    uv run python D:\scripts\lcstats\lcstats.py
+    uv run D:\scripts\lcstats\lcstats.py
 }
 
 function poweroff() {
